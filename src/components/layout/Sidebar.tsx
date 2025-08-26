@@ -22,7 +22,6 @@ import {
   ChevronRight
 } from 'lucide-react'
 import { useUIStore } from '@/stores/ui-store'
-import { useAuthStore } from '@/stores/auth-store'
 import { cn } from '@/utils/cn'
 
 const navigationItems = [
@@ -138,7 +137,6 @@ const navigationItems = [
 
 export function Sidebar() {
   const { sidebarOpen, sidebarCollapsed, toggleSidebar, setSidebarCollapsed } = useUIStore()
-  const { user, tenant } = useAuthStore()
 
   return (
     <>
@@ -178,18 +176,18 @@ export function Sidebar() {
             </button>
           </div>
 
-          {/* User Info */}
+          {/* Platform Info */}
           {!sidebarCollapsed && (
             <div className="p-4 border-b border-border">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
                   <span className="text-sm font-medium text-primary">
-                    {user?.name?.charAt(0) || 'U'}
+                    M
                   </span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium truncate">{user?.name}</p>
-                  <p className="text-xs text-muted-foreground truncate">{tenant?.name}</p>
+                  <p className="text-sm font-medium truncate">Marketing Platform</p>
+                  <p className="text-xs text-muted-foreground truncate">Admin Dashboard</p>
                 </div>
               </div>
             </div>

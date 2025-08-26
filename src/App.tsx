@@ -2,17 +2,10 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 
-import { useAuthStore } from '@/stores/auth-store'
 import { useUIStore } from '@/stores/ui-store'
 
 // Layout Components
 import { RootLayout } from '@/components/layout/RootLayout'
-import { AuthLayout } from '@/components/layout/AuthLayout'
-
-// Auth Pages
-import { LoginPage } from '@/modules/auth/LoginPage'
-import { RegisterPage } from '@/modules/auth/RegisterPage'
-import { ForgotPasswordPage } from '@/modules/auth/ForgotPasswordPage'
 
 // Main Module Pages
 import { OverviewPage } from '@/modules/overview/OverviewPage'
@@ -40,33 +33,8 @@ import { SettingsPage } from '@/modules/settings/SettingsPage'
 // Error Pages
 import { NotFoundPage } from '@/components/error/NotFoundPage'
 
-// Protected Route Component
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated, isLoading } = useAuthStore()
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="loading-spinner w-8 h-8"></div>
-      </div>
-    )
-  }
-
-  if (!isAuthenticated) {
-    return <Navigate to="/auth/login" replace />
-  }
-
-  return <>{children}</>
-}
-
-// Public Route Component (redirects to dashboard if authenticated)
-const PublicRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated } = useAuthStore()
-
-  if (isAuthenticated) {
-    return <Navigate to="/overview" replace />
-  }
-
+// Simple Route Component (no auth required)
+const SimpleRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>
 }
 
@@ -108,28 +76,13 @@ function App() {
       </Helmet>
 
       <Routes>
-        {/* Auth Routes */}
-        <Route
-          path="/auth"
-          element={
-            <PublicRoute>
-              <AuthLayout />
-            </PublicRoute>
-          }
-        >
-          <Route path="login" element={<LoginPage />} />
-          <Route path="register" element={<RegisterPage />} />
-          <Route path="forgot-password" element={<ForgotPasswordPage />} />
-          <Route index element={<Navigate to="login" replace />} />
-        </Route>
-
-        {/* Protected Routes */}
+        {/* Main Routes (No Auth Required) */}
         <Route
           path="/"
           element={
-            <ProtectedRoute>
+            <SimpleRoute>
               <RootLayout />
-            </ProtectedRoute>
+            </SimpleRoute>
           }
         >
           {/* Overview Dashboard */}

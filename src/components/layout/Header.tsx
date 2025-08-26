@@ -11,11 +11,9 @@ import {
   Moon,
   Monitor
 } from 'lucide-react'
-import { useAuthStore } from '@/stores/auth-store'
 import { useUIStore } from '@/stores/ui-store'
 
 export function Header() {
-  const { user, logout } = useAuthStore()
   const { toggleSidebar, theme, setTheme, notifications } = useUIStore()
   const [searchQuery, setSearchQuery] = useState('')
   const [showUserMenu, setShowUserMenu] = useState(false)
@@ -79,7 +77,7 @@ export function Header() {
             </button>
           </div>
 
-          {/* User menu */}
+          {/* Settings */}
           <div className="relative">
             <button
               onClick={() => setShowUserMenu(!showUserMenu)}
@@ -87,10 +85,10 @@ export function Header() {
             >
               <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
                 <span className="text-sm font-medium text-primary">
-                  {user?.name?.charAt(0) || 'U'}
+                  S
                 </span>
               </div>
-              <span className="hidden sm:block text-sm font-medium">{user?.name}</span>
+              <span className="hidden sm:block text-sm font-medium">Settings</span>
               <ChevronDown className="w-4 h-4" />
             </button>
 
@@ -103,31 +101,16 @@ export function Header() {
                 />
                 <div className="absolute right-0 top-full mt-2 w-56 bg-card border border-border rounded-md shadow-lg z-50">
                   <div className="p-4 border-b border-border">
-                    <p className="text-sm font-medium">{user?.name}</p>
-                    <p className="text-xs text-muted-foreground">{user?.email}</p>
+                    <p className="text-sm font-medium">Marketing Platform</p>
+                    <p className="text-xs text-muted-foreground">Admin Dashboard</p>
                   </div>
                   <div className="p-2">
-                    <button
-                      onClick={() => {/* TODO: Navigate to profile */}}
-                      className="flex items-center space-x-2 w-full px-3 py-2 text-sm hover:bg-accent rounded-md transition-colors"
-                    >
-                      <User className="w-4 h-4" />
-                      <span>Profile</span>
-                    </button>
                     <button
                       onClick={() => {/* TODO: Navigate to settings */}}
                       className="flex items-center space-x-2 w-full px-3 py-2 text-sm hover:bg-accent rounded-md transition-colors"
                     >
                       <Settings className="w-4 h-4" />
                       <span>Settings</span>
-                    </button>
-                    <hr className="my-2" />
-                    <button
-                      onClick={logout}
-                      className="flex items-center space-x-2 w-full px-3 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-md transition-colors"
-                    >
-                      <LogOut className="w-4 h-4" />
-                      <span>Sign out</span>
                     </button>
                   </div>
                 </div>
