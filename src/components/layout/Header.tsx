@@ -4,8 +4,6 @@ import {
   Search, 
   Bell, 
   Settings, 
-  LogOut, 
-  User,
   ChevronDown,
   Sun,
   Moon,
