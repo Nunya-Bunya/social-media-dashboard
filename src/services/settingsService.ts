@@ -302,12 +302,12 @@ class SettingsService {
     }
   }
 
-  private async testFacebook(apiKey: string): Promise<{ success: boolean; message: string }> {
+  private async testFacebook(_apiKey: string): Promise<{ success: boolean; message: string }> {
     // Facebook API testing would go here
     return { success: true, message: 'Facebook API key format looks valid' }
   }
 
-  private async testSupabase(apiKey: string): Promise<{ success: boolean; message: string }> {
+  private async testSupabase(_apiKey: string): Promise<{ success: boolean; message: string }> {
     // Supabase connection testing would go here
     return { success: true, message: 'Supabase configuration looks valid' }
   }

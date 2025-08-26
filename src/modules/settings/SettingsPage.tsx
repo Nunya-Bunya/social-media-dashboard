@@ -4,13 +4,10 @@ import {
   Eye, 
   EyeOff, 
   Key, 
-  Globe, 
-  MessageSquare, 
   Share2, 
   Database,
   Cloud,
   Bot,
-  Settings as SettingsIcon,
   CheckCircle,
   AlertCircle
 } from 'lucide-react'
