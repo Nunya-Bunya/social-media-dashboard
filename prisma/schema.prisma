@@ -1,0 +1,211 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Tenant {
+  id        String   @id @default(cuid())
+  name      String
+  domain    String   @unique
+  settings  String?  // JSON as string for SQLite
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  users           User[]
+  brands          Brand[]
+  clients         Client[]
+  aiAssistants    AIAssistant[]
+  chatSessions    ChatSession[]
+  businessDocuments BusinessDocument[]
+  aiTasks         AITask[]
+
+  @@map("tenants")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  tenantId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  tenant        Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  aiAssistants  AIAssistant[]
+  chatSessions  ChatSession[]
+  aiTasks       AITask[]
+
+  @@map("users")
+}
+
+model Brand {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  logo        String?
+  website     String?
+  tenantId    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  tenant       Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  aiAssistants AIAssistant[]
+
+  @@map("brands")
+}
+
+model Client {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  company     String?
+  phone       String?
+  tenantId    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  tenant       Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  aiAssistants AIAssistant[]
+
+  @@map("clients")
+}
+
+// AI Assistant Models
+model AIAssistant {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  businessType String  // "law", "photography", "marketing", etc.
+  prompt      String   // Custom system prompt for this business
+  settings    String?  // JSON as string for SQLite
+  isActive    Boolean  @default(true)
+  brandId     String?
+  clientId    String?
+  createdBy   String
+  tenantId    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  brand     Brand?    @relation(fields: [brandId], references: [id])
+  client    Client?   @relation(fields: [clientId], references: [id])
+  creator   User      @relation(fields: [createdBy], references: [id])
+  tenant    Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  chatSessions ChatSession[]
+  businessDocuments BusinessDocument[]
+  aiTasks AITask[]
+
+  @@map("ai_assistants")
+}
+
+model ChatSession {
+  id            String   @id @default(cuid())
+  title         String?
+  assistantId   String
+  userId        String
+  tenantId      String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  assistant AIAssistant @relation(fields: [assistantId], references: [id], onDelete: Cascade)
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tenant    Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  messages  ChatMessage[]
+
+  @@map("chat_sessions")
+}
+
+model ChatMessage {
+  id            String          @id @default(cuid())
+  sessionId     String
+  role          ChatMessageRole
+  content       String
+  metadata      String?         // JSON as string for SQLite
+  createdAt     DateTime        @default(now())
+
+  // Relations
+  session ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("chat_messages")
+}
+
+model BusinessDocument {
+  id          String   @id @default(cuid())
+  name        String
+  type        String   // "strategy", "notes", "uploaded_file", etc.
+  content     String?  // For text documents
+  fileUrl     String?  // For uploaded files
+  fileSize    Int?
+  metadata    String?  // JSON as string for SQLite
+  assistantId String
+  tenantId    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  assistant AIAssistant @relation(fields: [assistantId], references: [id], onDelete: Cascade)
+  tenant    Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@map("business_documents")
+}
+
+model AITask {
+  id          String       @id @default(cuid())
+  title       String
+  description String?
+  status      TaskStatus   @default(PENDING)
+  priority    TaskPriority @default(MEDIUM)
+  dueDate     DateTime?
+  completedAt DateTime?
+  assistantId String
+  userId      String
+  tenantId    String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  // Relations
+  assistant AIAssistant @relation(fields: [assistantId], references: [id], onDelete: Cascade)
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tenant    Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@map("ai_tasks")
+}
+
+// Enums
+enum Role {
+  ADMIN
+  USER
+}
+
+enum ChatMessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
