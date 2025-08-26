@@ -16,7 +16,6 @@ import {
   Image, 
   Bot, 
   Megaphone, 
-  UserSearch, 
   Phone,
   Settings,
   ChevronLeft,
@@ -126,7 +125,7 @@ const navigationItems = [
   {
     title: 'Lead Finder',
     href: '/lead-finder',
-    icon: UserSearch,
+    icon: Users,
     description: 'Prospect Discovery'
   },
   {

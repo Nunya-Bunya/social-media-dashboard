@@ -13,15 +13,14 @@ import {
 } from 'lucide-react'
 import { useAuthStore } from '@/stores/auth-store'
 import { useUIStore } from '@/stores/ui-store'
-import { cn } from '@/utils/cn'
 
 export function Header() {
   const { user, logout } = useAuthStore()
-  const { sidebarOpen, toggleSidebar, theme, setTheme, notifications } = useUIStore()
+  const { toggleSidebar, theme, setTheme, notifications } = useUIStore()
   const [searchQuery, setSearchQuery] = useState('')
   const [showUserMenu, setShowUserMenu] = useState(false)
 
-  const unreadNotifications = notifications.filter(n => !n.read).length
+  const unreadNotifications = notifications.length
 
   return (
     <header className="sticky top-0 z-30 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">

@@ -5,7 +5,7 @@ import { NotificationPanel } from './NotificationPanel'
 import { useUIStore } from '@/stores/ui-store'
 
 export function RootLayout() {
-  const { sidebarOpen, sidebarCollapsed } = useUIStore()
+  const { sidebarOpen } = useUIStore()
 
   return (
     <div className="min-h-screen bg-background">

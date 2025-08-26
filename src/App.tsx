@@ -25,10 +25,10 @@ import { EmailMarketingPage } from '@/modules/email-marketing/EmailMarketingPage
 import { ReportsPage } from '@/modules/reports/ReportsPage'
 import { BrandPage } from '@/modules/brand/BrandPage'
 import { CompetitivePage } from '@/modules/competitive/CompetitivePage'
-import { ListeningPage } from '@/modules/listening/ListeningPage'
+import { SocialListeningPage as ListeningPage } from '@/modules/listening/SocialListeningPage'
 import { OutreachPage } from '@/modules/outreach/OutreachPage'
 import { CRMPage } from '@/modules/crm/CRMPage'
-import { MediaPage } from '@/modules/media/MediaPage'
+import { MediaLibraryPage as MediaPage } from '@/modules/media/MediaLibraryPage'
 import { AIAssistantPage } from '@/modules/ai-assistant/AIAssistantPage'
 import { PRPage } from '@/modules/pr/PRPage'
 import { LeadFinderPage } from '@/modules/lead-finder/LeadFinderPage'
@@ -71,8 +71,7 @@ const PublicRoute = ({ children }: { children: React.ReactNode }) => {
 }
 
 function App() {
-  const { theme, setTheme } = useUIStore()
-  const { isAuthenticated } = useAuthStore()
+  const { theme } = useUIStore()
 
   // Apply theme on mount
   useEffect(() => {
